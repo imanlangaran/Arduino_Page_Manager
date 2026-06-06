@@ -1,16 +1,33 @@
-#include "IPage.h"
-#include "Page1.h"
 
-IPage* page;
+#include "PageManager.h"
+#include "Pages/IPage.h"
+
+#include "Pages/Page1.h"
+#include "Pages/Page2.h"
+
+PageManager pageManager;
 
 Page1 page1;
+Page2 page2;
 
-void setup(){
+void setup()
+{
   Serial.begin(9600);
   Serial.println("Ready");
-  page = &page1;
+  pageManager.registerPage(&page1);
+  pageManager.registerPage(&page2);
 }
 
-void loop(){
-  page->run();
+void loop()
+{
+  if (Serial.available())
+  {
+    char input = Serial.read();
+
+    if (input == 'n')
+    {
+      pageManager.nextPage();
+    }
+  }
+  pageManager.run();
 }
