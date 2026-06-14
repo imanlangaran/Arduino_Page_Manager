@@ -5,8 +5,11 @@
 #include "Pages/Page1.h"
 #include "Pages/Page2.h"
 
-PageManager pageManager;
+#include "./ButtonHandlers/PushButtonInput.h"
 
+IInputDevice *input;
+
+PageManager pageManager;
 Page1 page1;
 Page2 page2;
 
@@ -14,20 +17,38 @@ void setup()
 {
   Serial.begin(9600);
   Serial.println("Ready");
+
+  input = new PushButtonInput(3);
+
   pageManager.registerPage(&page1);
   pageManager.registerPage(&page2);
 }
 
 void loop()
 {
-  if (Serial.available())
-  {
-    char input = Serial.read();
+  input->update();
 
-    if (input == 'n')
+  if (input->hasEvent())
+  {
+    switch (input->getEvent())
     {
+    case InputEvent::Click:
+      Serial.println("Click");
+      break;
+
+    case InputEvent::DoubleClick:
+      Serial.println("Double Click");
       pageManager.nextPage();
+      break;
+
+    case InputEvent::LongPress:
+      Serial.println("Long Press");
+      break;
+
+    default:
+      break;
     }
   }
+
   pageManager.run();
 }
