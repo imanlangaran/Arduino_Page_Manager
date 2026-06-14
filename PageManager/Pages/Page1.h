@@ -1,8 +1,9 @@
 #pragma once
 
-#include <Arduino.h> // Add this line
+#include <Arduino.h>
 
 #include "./IPage.h"
+#include "../helpers/IntervalTimer.h"
 
 class Page1 : public IPage
 {
@@ -10,8 +11,11 @@ private:
   bool printed;
   uint8_t counter;
 
+  IntervalTimer counterTimer;
+
 public:
   Page1(void)
+      : counterTimer(100)
   {
     printed = false;
     counter = 0;
@@ -25,19 +29,26 @@ public:
       printed = true;
     }
 
-    addCounter();
-    internalDelay();
-
+    if (counterTimer.ready())
+    {
+      addCounter();
+    }
   }
 
-  void addCounter(){
+  void addCounter()
+  {
     counter++;
     Serial.print("[page1] counter: ");
     Serial.println(counter);
   }
 
-  // TODO: implement delay without 'delay'
-  void internalDelay(){
-    delay(100);
+  void stop()
+  {
+    counterTimer.stop();
+  }
+
+  void start()
+  {
+    counterTimer.start();
   }
 };
