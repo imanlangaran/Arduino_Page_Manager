@@ -31,7 +31,7 @@ public:
       : pin(buttonPin),
         debounceTimer(50)
   {
-    pinMode(pin, INPUT_PULLUP);
+    pinMode(pin, INPUT);
 
     currentState = digitalRead(pin);
     lastState = currentState;
@@ -53,14 +53,14 @@ public:
     currentState = digitalRead(pin);
 
     // Pressed
-    if (lastState == HIGH && currentState == LOW)
+    if (lastState == LOW && currentState == HIGH)
     {
       pressStartTime = millis();
       longPressTriggered = false;
     }
 
     // Long press
-    if (currentState == LOW &&
+    if (currentState == HIGH &&
         !longPressTriggered &&
         millis() - pressStartTime >= LONG_PRESS_MS)
     {
@@ -71,7 +71,7 @@ public:
     }
 
     // Released
-    if (lastState == LOW && currentState == HIGH)
+    if (lastState == HIGH && currentState == LOW)
     {
       if (!longPressTriggered)
       {
