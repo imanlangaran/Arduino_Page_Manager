@@ -1,26 +1,33 @@
 #pragma once
 
-#include <Arduino.h> // Add this line
+#include <Arduino.h>
 
 #include "./IPage.h"
+#include "../helpers/IntervalTimer.h"
+#include "../display_wrapper.h"
 
 class Page2 : public IPage
 {
 private:
-  bool printed;
+  IntervalTimer counterTimer;
 
 public:
   Page2(void)
+      : counterTimer(500)
   {
-    printed = false;
   }
 
   void run(void)
   {
-    if (!printed)
+
+    if (counterTimer.ready())
     {
-      Serial.println("[page2] hellow there only once...");
-      printed = true;
+
+      g_clear_display();
+
+      g_show_text(10, 30, "[page 2]");
+
+      g_update_display();
     }
   }
 };

@@ -7,6 +7,8 @@
 
 #include "./ButtonHandlers/PushButtonInput.h"
 
+#include "display_wrapper.h"
+
 IInputDevice *input;
 
 PageManager pageManager;
@@ -18,7 +20,9 @@ void setup()
   Serial.begin(9600);
   Serial.println("Ready");
 
-  input = new PushButtonInput(3);
+  input = new PushButtonInput(2);
+
+  g_init_display();
 
   pageManager.registerPage(&page1);
   pageManager.registerPage(&page2);

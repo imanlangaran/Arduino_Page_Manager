@@ -4,6 +4,7 @@
 
 #include "./IPage.h"
 #include "../helpers/IntervalTimer.h"
+#include "../display_wrapper.h"
 
 class Page1 : public IPage
 {
@@ -15,7 +16,7 @@ private:
 
 public:
   Page1(void)
-      : counterTimer(100)
+      : counterTimer(500)
   {
     printed = false;
     counter = 0;
@@ -32,6 +33,13 @@ public:
     if (counterTimer.ready())
     {
       addCounter();
+
+      g_clear_display();
+
+      g_show_text(10, 30, "[page 1]");
+      g_show_number(10, 50, counter);
+
+      g_update_display();
     }
   }
 
